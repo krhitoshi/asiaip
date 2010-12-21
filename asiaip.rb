@@ -5,13 +5,16 @@ class IPS
     @value = value.to_i
     @elems = start.split('.').map{|elem| elem.to_i}
   end
-  def IPS.cidr(*octet)
-    octet.join(".")
+  def IPS.cidr(*octets)
+    octets.each do |octet|
+      raise "out of range: octet is larger than 255" if octet > 255
+    end
+    octets.join(".")
   end
   def output
     text = ""
     if @value < 256
-      raise("out of range")
+      raise "out of range"
     elsif @value == 256
       text << "#{@start}/24\n" 
     elsif @value < 256**2
@@ -27,7 +30,7 @@ class IPS
         text << "#{base}/16 #{@value} +#{i}\n" 
       }
     else
-      raise("out of range")
+      raise "out of range"
     end
     text
   end

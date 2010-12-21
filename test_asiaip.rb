@@ -7,7 +7,20 @@ class TestIPS < Test::Unit::TestCase
   def setup
   end
   def test_cidr
-    assert_equal("192.168.0.1", IPS.cidr(192, 168, 0, 1))
+    values = [[[192, 168, 0, 1],"192.168.0.1"],
+              [[172, 16, 100, 255],"172.16.100.255"]]
+
+    values.each do |input, res|
+      assert_equal(res, IPS.cidr(*input))
+    end
+  end
+  def test_cidr_raise
+    values = [[192, 168, 0, 256], [192, 168, 256, 0],
+              [192, 256, 0, 1], [256, 168, 0, 1]]
+
+    values.each do |input|
+      assert_raise(RuntimeError){ IPS.cidr(*input) }
+    end
   end
 end
 
