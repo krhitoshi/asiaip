@@ -1,10 +1,12 @@
-#!/usr/bin/ruby -w
 
 class IPS
   def initialize(start, value)
     @start = start
     @value = value.to_i
     @elems = start.split('.').map{|elem| elem.to_i}
+  end
+  def cidr(*octet)
+    octet.join(".")
   end
   def output
     text = ""
@@ -51,5 +53,3 @@ class APNIC
   end
 end
 
-apnic = APNIC.new("IN")
-apnic.output
