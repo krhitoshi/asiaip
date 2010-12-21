@@ -6,6 +6,7 @@ class IPS
     @elems = start.split('.').map{|elem| elem.to_i}
   end
   def IPS.cidr(*octets)
+    raise "wrong number of octets" if octets.size != 4
     octets.each do |octet|
       raise "out of range: octet is larger than 255" if octet > 255
     end

@@ -16,7 +16,9 @@ class TestIPS < Test::Unit::TestCase
   end
   def test_cidr_raise
     values = [[192, 168, 0, 256], [192, 168, 256, 0],
-              [192, 256, 0, 1], [256, 168, 0, 1]]
+              [192, 256, 0, 1], [256, 168, 0, 1],
+              [192, 168, 0], [192, 168, 0, 0, 1],
+             ]
 
     values.each do |input|
       assert_raise(RuntimeError){ IPS.cidr(*input) }
