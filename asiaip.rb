@@ -5,7 +5,7 @@ class IPS
     @value = value.to_i
     @elems = start.split('.').map{|elem| elem.to_i}
   end
-  def cidr(*octet)
+  def IPS.cidr(*octet)
     octet.join(".")
   end
   def output
@@ -52,4 +52,3 @@ class APNIC
     end
   end
 end
-
