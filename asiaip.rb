@@ -8,22 +8,24 @@ class IPS
   end
   def output
     text = ""
-    if @value == 256
+    if @value < 256
+      raise("out of range")
+    elsif @value == 256
       text << "#{@start}/24\n" 
-    elsif @value < 256*256
+    elsif @value < 256**2
       0.upto(@value/256-1){|i|
         digit = @elems[2]+i
         puts "OUT #{digit}" if digit > 255
         base = [@elems[0],@elems[1],@elems[2]+i,@elems[3]].join('.')
         text << "#{base}/24 #{@value} +#{i}\n" 
       }
-    elsif @value < 256*256*256
+    elsif @value < 256**3
       0.upto(@value/(256*256)-1){|i|
         base = [@elems[0],@elems[1]+i,@elems[2],@elems[3]].join('.')
         text << "#{base}/16 #{@value} +#{i}\n" 
       }
-    elsif @value < 256*256*256
-      test << ""
+    else
+      raise("out of range")
     end
     text
   end
