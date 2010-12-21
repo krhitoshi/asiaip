@@ -1,3 +1,4 @@
+#!/usr/bin/ruby -w
 
 class IPS
   def initialize(start, value)
