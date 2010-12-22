@@ -3,6 +3,12 @@
 require './asiaip.rb'
 require 'test/unit'
 
+class TestNetwork < Test::Unit::TestCase
+  def test_cidr
+    assert_equal("192.168.0.0/24", Network.new("192.168.0.0",24).cidr)
+  end
+end
+
 class TestIPS < Test::Unit::TestCase
   def setup
   end

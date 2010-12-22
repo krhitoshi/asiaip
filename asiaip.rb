@@ -1,4 +1,14 @@
 
+class Network
+  def initialize(network, prefix)
+    @network = network
+    @prefix = prefix
+  end
+  def cidr
+    "#{@network}/#{@prefix}"
+  end
+end
+
 class IPS
   def initialize(country, start, value)
     @country = country
@@ -22,12 +32,14 @@ class IPS
         digit = @elems[2]+i
         puts "OUT #{digit}" if digit > 255
         base = IPS.cidr(@elems[0],@elems[1],@elems[2]+i,@elems[3])
-        ips << "#{@country} #{base}/24"
+        network = Network.new(base, 24)
+        ips << "#{@country} #{network.cidr}"
       }
     elsif @value < 256**3
       0.upto(@value/(256**2)-1){|i|
         base = IPS.cidr(@elems[0],@elems[1]+i,@elems[2],@elems[3])
-        ips << "#{@country} #{base}/16" 
+        network = Network.new(base, 16)
+        ips << "#{@country} #{network.cidr}" 
       }
     else
       raise "out of range"
