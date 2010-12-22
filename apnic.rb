@@ -3,5 +3,8 @@
 $:.unshift File.join(File.dirname(__FILE__), "lib")
 require 'asiaip'
 
-apnic = AsiaIP.new
-apnic.output
+#asiaip = AsiaIP.new
+asiaip = AsiaIP.new("http://ftp.apnic.net/stats/apnic/delegated-apnic-latest")
+asiaip.cidr_each("IN") do |cidr|
+  puts cidr
+end

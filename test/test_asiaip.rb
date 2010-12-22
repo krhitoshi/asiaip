@@ -77,7 +77,8 @@ class TestAsiaIP < Test::Unit::TestCase
   end
   def test_file
     assert_nothing_raised{
-      asiaip = AsiaIP.new("data")
+#      asiaip = AsiaIP.new("data")
+#      asiaip = AsiaIP.new("http://ftp.apnic.net/stats/apnic/delegated-apnic-latest")
       asiaip.cidr_each("IN"){}
     }
   end

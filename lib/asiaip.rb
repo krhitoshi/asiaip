@@ -1,4 +1,6 @@
 
+require 'open-uri'
+
 class Network
   def initialize(network, prefix)
     @network = network
