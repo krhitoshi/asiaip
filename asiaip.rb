@@ -51,21 +51,11 @@ class IPS
   end
   def output
     ips = []
-    if prefix == 24
-      0.upto(@value/(256**@mask_octet)-1){|i|
-        base = IPS.cidr(@elems[0],@elems[1],@elems[2]+i,@elems[3])
-        network = Network.new(base, prefix)
-        ips << "#{@country} #{network.cidr}"
-      }
-    elsif prefix == 16
-      0.upto(@value/(256**@mask_octet)-1){|i|
-        base = IPS.cidr(@elems[0],@elems[1]+i,@elems[2],@elems[3])
-        network = Network.new(base, prefix)
-        ips << "#{@country} #{network.cidr}" 
-      }
-    else
-      raise "Unknown prefix: #{prefix}"
-    end
+    0.upto(@value/(256**@mask_octet)-1){|i|
+      base = IPS.cidr_calc(@start,i ,prefix)
+      network = Network.new(base, prefix)
+      ips << "#{@country} #{network.cidr}"
+    }
     ips
   end
 end
