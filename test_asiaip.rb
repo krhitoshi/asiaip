@@ -12,6 +12,18 @@ end
 class TestIPS < Test::Unit::TestCase
   def setup
   end
+  def test_raise
+    assert_raise(RuntimeError){IPS.new("IN","192.168.0.0", "10")}
+    assert_raise(RuntimeError){IPS.new("IN","192.168.0.0", "16777216")}
+  end
+  def test_prefix
+    assert_equal(24, IPS.new("IN","192.168.0.0", "256").prefix)
+    assert_equal(16, IPS.new("CN","192.168.0.0", "65536").prefix)
+    assert_equal(16, IPS.new("CN","192.168.0.0", "131072").prefix)
+  end
+  def test_mask_octet
+    assert_equal(1, IPS.new("IN","192.168.0.0", "256").mask_octet)
+  end
   def test_ips
     assert_equal(["IN 192.168.0.0/24"],
                  IPS.new("IN","192.168.0.0", "256").output)
