@@ -10,26 +10,26 @@ class Network
 end
 
 class IPS
-  attr_reader :prefix, :mask_octet
+  attr_reader :mask_octet
   def initialize(country, start, value)
     @country = country
     @start = start
     @value = value.to_i
     @elems = start.split('.').map{|elem| elem.to_i}
-    @prefix = nil
     @mask_octet = nil
 
     if @value < 256
       raise "out of range"
     elsif @value < 256**2
-      @prefix = 24
       @mask_octet = 1
     elsif @value < 256**3
-      @prefix = 16
       @mask_octet = 2
     else
       raise "out of range"
     end
+  end
+  def prefix
+    32 - 8*@mask_octet
   end
   def IPS.cidr(*octets)
     raise "wrong number of octets" if octets.size != 4
@@ -43,13 +43,13 @@ class IPS
     if @value < 256**2
       0.upto(@value/256-1){|i|
         base = IPS.cidr(@elems[0],@elems[1],@elems[2]+i,@elems[3])
-        network = Network.new(base, @prefix)
+        network = Network.new(base, prefix)
         ips << "#{@country} #{network.cidr}"
       }
     elsif @value < 256**3
       0.upto(@value/(256**2)-1){|i|
         base = IPS.cidr(@elems[0],@elems[1]+i,@elems[2],@elems[3])
-        network = Network.new(base, @prefix)
+        network = Network.new(base, prefix)
         ips << "#{@country} #{network.cidr}" 
       }
     end
