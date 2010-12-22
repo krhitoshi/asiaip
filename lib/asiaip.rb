@@ -24,6 +24,8 @@ class IPS
       @mask_octet = 1
     elsif @value < 256**3
       @mask_octet = 2
+    elsif @value < 256**4
+      @mask_octet = 3
     else
       raise "out of range"
     end
@@ -44,12 +46,14 @@ class IPS
       elems[2] += value
     elsif in_prefix == 16
       elems[1] += value
+    elsif in_prefix == 8
+      elems[0] += value
     else
         raise "Unknown prefix: #{in_prefix}"
     end
     IPS.cidr(*elems)
   end
-  def output
+  def to_cidr
     ips = []
     0.upto(@value/(256**@mask_octet)-1){|i|
       base = IPS.cidr_calc(@start,i ,prefix)
@@ -60,22 +64,21 @@ class IPS
   end
 end
 
-class APNIC
-  def initialize(country_code)
+class AsiaIP
+  def initialize
     @file = "delegated-apnic-latest"
     @ips = []
-    
-    open(@file).each{|line|
-      if line =~ /\|#{country_code}\|ipv4/
-        elems = line.split('|')
-        country, start, value = elems.values_at(1,3,4)
-        @ips << IPS.new(country, start, value)
-      end
-    }
   end
   def output
+    open(@file).each{|line|
+      next if line =~ /^#/
+      elems = line.split('|')
+      next if elems[2] != 'ipv4' || elems[3] == '*'
+      country, start, value = elems.values_at(1,3,4)
+      @ips << IPS.new(country, start, value)
+    }
     @ips.each do |ip|
-      puts ip.output
+      puts ip.to_cidr
     end
   end
 end

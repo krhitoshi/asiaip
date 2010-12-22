@@ -3,5 +3,5 @@
 $:.unshift File.join(File.dirname(__FILE__), "lib")
 require 'asiaip'
 
-apnic = APNIC.new("IN")
+apnic = AsiaIP.new
 apnic.output

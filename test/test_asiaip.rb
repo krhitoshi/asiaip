@@ -15,23 +15,27 @@ class TestIPS < Test::Unit::TestCase
   end
   def test_raise
     assert_raise(RuntimeError){IPS.new("IN","192.168.0.0", "10")}
-    assert_raise(RuntimeError){IPS.new("IN","192.168.0.0", "16777216")}
+    assert_raise(RuntimeError){IPS.new("IN","192.168.0.0", "4294967296")}
   end
   def test_prefix
     assert_equal(24, IPS.new("IN","192.168.0.0", "256").prefix)
     assert_equal(16, IPS.new("CN","192.168.0.0", "65536").prefix)
     assert_equal(16, IPS.new("CN","192.168.0.0", "131072").prefix)
+    assert_equal(8, IPS.new("CN","192.168.0.0", "16777216").prefix)
   end
   def test_mask_octet
     assert_equal(1, IPS.new("IN","192.168.0.0", "256").mask_octet)
+    assert_equal(2, IPS.new("CN","192.168.0.0", "65536").mask_octet)
+    assert_equal(2, IPS.new("CN","192.168.0.0", "131072").mask_octet)
+    assert_equal(3, IPS.new("CN","192.168.0.0", "16777216").mask_octet)
   end
   def test_ips
     assert_equal(["IN 192.168.0.0/24"],
-                 IPS.new("IN","192.168.0.0", "256").output)
+                 IPS.new("IN","192.168.0.0", "256").to_cidr)
     assert_equal(["CN 192.168.0.0/24","CN 192.168.1.0/24"],
-                 IPS.new("CN","192.168.0.0", "512").output)
+                 IPS.new("CN","192.168.0.0", "512").to_cidr)
     assert_equal(["JP 192.168.0.0/16","JP 192.169.0.0/16"],
-                 IPS.new("JP","192.168.0.0", "131072").output)
+                 IPS.new("JP","192.168.0.0", "131072").to_cidr)
   end
   def test_cidr
     values = [[[192, 168, 0, 0],"192.168.0.0"],
@@ -63,6 +67,8 @@ end
 
 class TestAsiaIP < Test::Unit::TestCase
   def setup
-    @ip = APNIC.new("IN")
+  end
+  def test_asiaip
+    ip = AsiaIP.new
   end
 end
