@@ -11,8 +11,6 @@ class TestNetwork < Test::Unit::TestCase
 end
 
 class TestIPS < Test::Unit::TestCase
-  def setup
-  end
   def test_raise
     assert_raise(RuntimeError){IPS.new("IN","192.168.0.0", "10")}
     assert_raise(RuntimeError){IPS.new("IN","192.168.0.0", "4294967296")}
@@ -72,8 +70,6 @@ class TestIPS < Test::Unit::TestCase
 end
 
 class TestAsiaIP < Test::Unit::TestCase
-  def setup
-  end
   def test_asiaip
     ip = AsiaIP.new
   end
