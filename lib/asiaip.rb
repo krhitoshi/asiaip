@@ -69,16 +69,20 @@ class AsiaIP
     @file = "delegated-apnic-latest"
     @ips = []
   end
-  def output
+  def cidr_each(search_country=nil)
     open(@file).each{|line|
       next if line =~ /^#/
       elems = line.split('|')
-      next if elems[2] != 'ipv4' || elems[3] == '*'
-      country, start, value = elems.values_at(1,3,4)
+      country, type, start, value = elems.values_at(1,2,3,4)
+      next if type != 'ipv4' || start == '*'
+      next if search_country && country != search_country
+
       @ips << IPS.new(country, start, value)
     }
     @ips.each do |ip|
-      puts ip.to_cidr
+      ip.to_cidr_list.each do |cidr|
+        yield cidr
+      end
     end
   end
 end

@@ -70,7 +70,11 @@ class TestIPS < Test::Unit::TestCase
 end
 
 class TestAsiaIP < Test::Unit::TestCase
+  def setup
+    @asiaip = AsiaIP.new
+  end
   def test_asiaip
-    ip = AsiaIP.new
+    assert_nothing_raised{@asiaip.cidr_each("IN"){}}
+    assert_nothing_raised{@asiaip.cidr_each{}}
   end
 end
