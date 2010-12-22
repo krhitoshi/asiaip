@@ -1,6 +1,7 @@
 
-#$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require './asiaip.rb'
+$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
+
+require 'asiaip'
 require 'test/unit'
 
 class TestNetwork < Test::Unit::TestCase
