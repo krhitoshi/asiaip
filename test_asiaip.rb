@@ -42,7 +42,12 @@ class TestIPS < Test::Unit::TestCase
   end
   def test_cidr_calc
     assert_equal("192.168.1.0",IPS.cidr_calc("192.168.0.0",1,24))
+    assert_equal("192.168.255.0",IPS.cidr_calc("192.168.0.0",255,24))
     assert_equal("192.169.0.0",IPS.cidr_calc("192.168.0.0",1,16))
+    assert_equal("192.255.0.0",IPS.cidr_calc("192.168.0.0",87,16))
+
+    assert_raise(RuntimeError){ IPS.cidr_calc("192.168.0.0",256,24) }
+    assert_raise(RuntimeError){ IPS.cidr_calc("192.168.0.0",88,16) }
   end
   def test_cidr_raise
     values = [[192, 168, 0, 256], [192, 168, 256, 0],
