@@ -6,8 +6,12 @@ require 'test/unit'
 class TestIPS < Test::Unit::TestCase
   def setup
   end
+  def test_ips
+    assert_equal(["192.168.0.0/24"],IPS.new("192.168.0.0", "256").output)
+    assert_equal(["192.168.0.0/24","192.168.1.0/24"],IPS.new("192.168.0.0", "512").output)
+  end
   def test_cidr
-    values = [[[192, 168, 0, 1],"192.168.0.1"],
+    values = [[[192, 168, 0, 0],"192.168.0.0"],
               [[172, 16, 100, 255],"172.16.100.255"]]
 
     values.each do |input, res|
