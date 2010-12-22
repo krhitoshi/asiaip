@@ -53,7 +53,7 @@ class IPS
     end
     IPS.cidr(*elems)
   end
-  def to_cidr
+  def to_cidr_list
     ips = []
     0.upto(@value/(256**@mask_octet)-1){|i|
       base = IPS.cidr_calc(@start,i ,prefix)

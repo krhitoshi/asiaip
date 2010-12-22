@@ -31,15 +31,15 @@ class TestIPS < Test::Unit::TestCase
   end
   def test_ips
     assert_equal(["IN 192.168.0.0/24"],
-                 IPS.new("IN","192.168.0.0", "256").to_cidr)
+                 IPS.new("IN","192.168.0.0", "256").to_cidr_list)
     assert_equal(["CN 192.168.0.0/24","CN 192.168.1.0/24"],
-                 IPS.new("CN","192.168.0.0", "512").to_cidr)
+                 IPS.new("CN","192.168.0.0", "512").to_cidr_list)
     assert_equal(["JP 192.168.0.0/16","JP 192.169.0.0/16"],
-                 IPS.new("JP","192.168.0.0", "131072").to_cidr)
+                 IPS.new("JP","192.168.0.0", "131072").to_cidr_list)
     assert_equal(["JP 192.168.0.0/8"],
-                 IPS.new("JP","192.168.0.0", "16777216").to_cidr)
+                 IPS.new("JP","192.168.0.0", "16777216").to_cidr_list)
     assert_equal(["JP 192.168.0.0/8", "JP 193.168.0.0/8"],
-                 IPS.new("JP","192.168.0.0", "33554432").to_cidr)
+                 IPS.new("JP","192.168.0.0", "33554432").to_cidr_list)
   end
   def test_cidr
     values = [[[192, 168, 0, 0],"192.168.0.0"],
