@@ -38,20 +38,33 @@ class IPS
     end
     octets.join(".")
   end
+  def IPS.cidr_calc(start, value, in_prefix)
+    elems = start.split('.').map{|elem| elem.to_i}
+    if in_prefix == 24
+      elems[2] += value
+    elsif in_prefix == 16
+      elems[1] += value
+    else
+        raise "Unknown prefix: #{in_prefix}"
+    end
+    IPS.cidr(*elems)
+  end
   def output
     ips = []
-    if @value < 256**2
-      0.upto(@value/256-1){|i|
+    if prefix == 24
+      0.upto(@value/(256**@mask_octet)-1){|i|
         base = IPS.cidr(@elems[0],@elems[1],@elems[2]+i,@elems[3])
         network = Network.new(base, prefix)
         ips << "#{@country} #{network.cidr}"
       }
-    elsif @value < 256**3
-      0.upto(@value/(256**2)-1){|i|
+    elsif prefix == 16
+      0.upto(@value/(256**@mask_octet)-1){|i|
         base = IPS.cidr(@elems[0],@elems[1]+i,@elems[2],@elems[3])
         network = Network.new(base, prefix)
         ips << "#{@country} #{network.cidr}" 
       }
+    else
+      raise "Unknown prefix: #{prefix}"
     end
     ips
   end
