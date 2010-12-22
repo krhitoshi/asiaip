@@ -65,8 +65,8 @@ class IPS
 end
 
 class AsiaIP
-  def initialize
-    @file = "delegated-apnic-latest"
+  def initialize(file="delegated-apnic-latest")
+    @file = file
     @ips = []
   end
   def cidr_each(search_country=nil)

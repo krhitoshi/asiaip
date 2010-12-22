@@ -70,11 +70,15 @@ class TestIPS < Test::Unit::TestCase
 end
 
 class TestAsiaIP < Test::Unit::TestCase
-  def setup
-    @asiaip = AsiaIP.new
-  end
   def test_asiaip
-    assert_nothing_raised{@asiaip.cidr_each("IN"){}}
-    assert_nothing_raised{@asiaip.cidr_each{}}
+    asiaip = AsiaIP.new
+#    assert_nothing_raised{asiaip.cidr_each("IN"){}}
+#    assert_nothing_raised{asiaip.cidr_each{}}
+  end
+  def test_file
+    assert_nothing_raised{
+      asiaip = AsiaIP.new("data")
+      asiaip.cidr_each("IN"){}
+    }
   end
 end
