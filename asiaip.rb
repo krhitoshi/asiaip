@@ -1,6 +1,7 @@
 
 class IPS
-  def initialize(start, value)
+  def initialize(country, start, value)
+    @country = country
     @start = start
     @value = value.to_i
     @elems = start.split('.').map{|elem| elem.to_i}
@@ -16,19 +17,17 @@ class IPS
     ips = []
     if @value < 256
       raise "out of range"
-    elsif @value == 256
-      ips << "#{@start}/24" 
     elsif @value < 256**2
       0.upto(@value/256-1){|i|
         digit = @elems[2]+i
         puts "OUT #{digit}" if digit > 255
         base = IPS.cidr(@elems[0],@elems[1],@elems[2]+i,@elems[3])
-        ips << "#{base}/24"
+        ips << "#{@country} #{base}/24"
       }
     elsif @value < 256**3
       0.upto(@value/(256**2)-1){|i|
         base = IPS.cidr(@elems[0],@elems[1]+i,@elems[2],@elems[3])
-        ips << "#{base}/16" 
+        ips << "#{@country} #{base}/16" 
       }
     else
       raise "out of range"
@@ -45,8 +44,8 @@ class APNIC
     open(@file).each{|line|
       if line =~ /\|#{country_code}\|ipv4/
         elems = line.split('|')
-        start, value = elems[3..4]
-        @ips << IPS.new(start, value)
+        contry, start, value = elems[2..4]
+        @ips << IPS.new(country, start, value)
       end
     }
   end
